@@ -1,48 +1,22 @@
-name: CI-CD
-on:
-  push:
-    branches: ["main"]
-  workflow_dispatch:
+name: CI-CD 
+on: 
+  push: 
+    branches: ["main"] 
+  workflow_dispatch: 
 
+jobs: 
+  CI: 
+    runs-on: ubuntu-latest 
+    steps: 
+      - run: echo "Obter código" 
+      - run: echo "Executar o Docker Build" 
+      - run: echo "Enviar a imagem Docker para o Docker Hub" 
 
-jobs:
-  CI:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Obter codigo
-        uses: actions/checkout@v4.2.2
-      - name: Login to Docker Hub
-        uses: docker/login-actions@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Construcao e envio da imagem Docker
-        with: 
-          context: ./src
-          push: true
-          file: ./src/Dockerfile
-          # tags: user/app:latest
-          tags: 
-            eliemarbueno/fake-shop:v${{ github.run_number }}
-            eliemarbueno/fake-shop:latest
-      
-      - run: echo "Executar o Docker Build"
-      - run: echo "Enviar a imagem Docker para o Docker Hub"
-  CD: 
-    needs: [CI]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Obter codigo
-        uses: actions/checkout@v4.2.2
-      - name: Configurar o kubeconfig
-        uses: azure/k8s-set-context@v4
-        with:
-          method: kubeconfig
-          kubeconfig: ${{ secrets.K8S_KUBECONFIG }}
-      - name: Executar o Deploy
-        uses: azure/k8s-deploy@v5
-        with:
-          manifests:
-            k8s/deployment.yaml
-          images: 
-            eliemarbueno/fake-shop:v${{ github.run_number }}
+  CD:  
+
+    needs: [CI] 
+    runs-on: ubuntu-latest 
+    steps: 
+      - run: echo "Obter código" 
+      - run: echo "Configurar o kubeconfig" 
+      - run: echo "Executar o apply" 
