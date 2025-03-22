@@ -53,7 +53,7 @@ spec:
     spec: 
       containers:
         - name: fakeshop
-          image: robsonmendes37/fake-shop-desafio:v4
+          image: robsonmendes37/fake-shop-desafio:latest
           ports:
             - containerPort: 5000
           env:
