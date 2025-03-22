@@ -53,7 +53,7 @@ spec:
     spec: 
       containers:
         - name: fakeshop
-          image: fabricioveronez/fake-shop-desafio:v2
+          image: robsonmendes37/fake-shop-desafio:v4
           ports:
             - containerPort: 5000
           env:
@@ -79,6 +79,5 @@ spec:
   ports:
     - port: 80
       targetPort: 5000
-      nodePort: 30000
   selector:
     app: fakeshop
