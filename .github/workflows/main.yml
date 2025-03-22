@@ -23,7 +23,9 @@ jobs:
           context: ./src
           push: true
           file : ./src/Dockerfile
-          tags: robsonmendes37/fake-shop-desafio:v${{ github.run_number }}
+          tags: | 
+            robsonmendes37/fake-shop-desafio:v${{ github.run_number }}
+            robsonmendes37/fake-shop-desafio:latest
       
 
 
@@ -31,6 +33,17 @@ jobs:
     needs: [CI]
     runs-on: ubuntu-latest
     steps:
-      - run: echo "obter codigo"
-      - run: echo "configurar ambiente"
-      - run: echo "Deploy da aplicacao"
+      - name: Obtendo o Codigo
+        uses: actions/checkout@v4.2.2
+        
+      - uses: azure/k8s-set-context@v4
+        with:
+           method: kubeconfig
+           kubeconfig: ${{ secrets.K8S_KUBECONFIG }}
+           
+      - uses: Azure/k8s-deploy@v5
+        with:
+           manifests: |
+              k8s/deployment.yaml
+           images: 
+              robsonmendes37/fake-shop-desafio:v${{ github.run_number }}'
