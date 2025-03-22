@@ -1,0 +1,106 @@
+# postgresql-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+  labels:
+    app: postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:latest
+        ports:
+        - containerPort: 5432
+        env:
+        - name: POSTGRES_USER
+          value: ecommerce
+        - name: POSTGRES_PASSWORD
+          value: Pg1234
+        - name: POSTGRES_DB
+          value: ecommerce
+        # Melhorando a configuração do postgres
+        readinessProbe:
+          exec:
+            command: ["pg_isready", "-U", "ecommerce"]
+          initialDelaySeconds: 5
+          periodSeconds: 10
+---
+# postgresql-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres
+spec:
+  selector:
+    app: postgres
+  ports:
+  - port: 5432
+    targetPort: 5432
+  type: ClusterIP  # Apenas visível dentro do cluster
+
+---
+# app-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fake-shop
+  labels:
+    app: fake-shop
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: fake-shop
+  template:
+    metadata:
+      labels:
+        app: fake-shop
+    spec:
+      containers:
+      - name: fake-shop
+        # image: eliemarbueno/fake-shop:v1
+        image: fabricioveronez/fake-shop-desafio:v1
+        ports:
+        - containerPort: 5000
+        env:
+        - name: DB_HOST
+          value: postgres
+        - name: DB_USER
+          value: ecommerce
+        - name: DB_PASSWORD
+          value: Pg1234
+        - name: DB_NAME
+          value: ecommerce
+        - name: FLASK_APP
+          value: index.py
+        # - name: DB_PORT
+        #   value: "5432"
+        # Adicionando retry logic para esperar o postgres iniciar
+        # lifecycle:
+        #   postStart:
+        #     exec:
+        #       command: ["/bin/sh", "-c", "sleep 15"]  # Dando tempo para o postgres iniciar completamente
+
+---
+# app-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: fake-shop
+spec:
+  selector:
+    app: fake-shop
+  ports:
+  - port: 80
+    targetPort: 5000
+    nodePort: 30000
+  type: LoadBalancer  # Permite acesso externo via nodePort
