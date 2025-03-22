@@ -34,5 +34,11 @@ jobs:
     steps: 
       - name: Obter codigo 
         uses: actions/checkout@v4.2.2 
-      - run: echo "Configurar o kubeconfig" 
+        
+      - name: Configurar o kubeconfig 
+        uses: azure/k8s-set-context@v4 
+        with: 
+          method: kubeconfig 
+          kubeconfig: ${{ secrets.K8S_KUBECONFIG }} 
+          
       - run: echo "Executar o apply" 
