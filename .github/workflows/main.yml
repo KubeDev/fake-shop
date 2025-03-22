@@ -25,7 +25,7 @@ jobs:
           file : ./src/Dockerfile
           tags: | 
             robsonmendes37/fake-shop-desafio:v${{ github.run_number }}
-            robsonmendes37/fake-shop-desafio:latest
+            robsonmendes37/fake-shop-desafio
       
 
 
@@ -35,15 +35,17 @@ jobs:
     steps:
       - name: Obtendo o Codigo
         uses: actions/checkout@v4.2.2
-        
-      - uses: azure/k8s-set-context@v4
+
+      - name: fazendo algo
+        uses: azure/k8s-set-context@v4
         with:
            method: kubeconfig
            kubeconfig: ${{ secrets.K8S_KUBECONFIG }}
-           
-      - uses: Azure/k8s-deploy@v5
+
+      - name: fazendo deploy
+        uses: Azure/k8s-deploy@v5
         with:
            manifests: |
               k8s/deployment.yaml
            images: 
-              robsonmendes37/fake-shop-desafio:latest
+              robsonmendes37/fake-shop-desafio:v${{ github.run_number }}
