@@ -2,7 +2,7 @@
 
 ## Sistema de Gerenciamento de Produtos e Vendas
 
-Este projeto consiste em um sistema de gerenciamento de produtos e vendas utilizando **Docker** e **Kubernetes**. O ambiente conta com balanceamento de carga, serviços e deploy automatizado, além de gerenciamento de versões e rollback. A **DigitalOcean** foi utilizada como provedor de nuvem para a hospedagem e gerenciamento do cluster Kubernetes.
+É sistema de gerenciamento de produtos e vendas utilizando **Docker** e **Kubernetes**. O ambiente conta com balanceamento de carga, serviços e deploy automatizado, além de gerenciamento de versões e rollback. A **DigitalOcean** foi utilizada como provedor de nuvem para a hospedagem e gerenciamento do cluster Kubernetes. O
 
 ---
 
