@@ -26,7 +26,7 @@ jobs:
           # tags: user/app:latest 
           tags:  
             eliemarbueno/fake-shop:v${{ github.run_number }} 
-            # eliemarbueno/fake-shop:latest 
+            eliemarbueno/fake-shop:latest 
             
   cd:  
     needs: [ci] 
