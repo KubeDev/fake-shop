@@ -10,15 +10,23 @@ jobs:
     steps:
       - name: Obter codigo 
         uses: actions/checkout@v4.2.2 
+      
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-          
-      - run: echo "Executar o Docker Build" 
-      - run: echo "Enviar a imagem Docker para o Docker Hub" 
-
+      
+      - name: Construir e enviar da imagem Docker 
+        with:  
+          context: ./src 
+          push: true 
+          file: ./src/Dockerfile 
+          # tags: user/app:latest 
+          tags:  
+            eliemarbueno/fake-shop:v${{ github.run_number }} 
+            eliemarbueno/fake-shop:latest 
+            
   CD:  
     needs: [CI] 
     runs-on: ubuntu-latest 
