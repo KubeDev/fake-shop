@@ -20,6 +20,7 @@ jobs:
       - name: Contrução e envio da imagem docker
         uses: docker/build-push-action@v6
         with:
+          context: ./src
           push: true
           file : ./src/Dockerfile
           tags: robsonmendes37/fake-shop-desafio:v3
