@@ -24,9 +24,9 @@ jobs:
           push: true 
           file: ./src/Dockerfile 
           # tags: user/app:latest 
-          tags:  
+          tags:  |
             eliemarbueno/fake-shop:v${{ github.run_number }} 
-            eliemarbueno/fake-shop
+            eliemarbueno/fake-shop:latest
             
   cd:  
     needs: [ci] 
