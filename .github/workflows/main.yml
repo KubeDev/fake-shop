@@ -46,4 +46,4 @@ jobs:
            manifests: |
               k8s/deployment.yaml
            images: 
-              robsonmendes37/fake-shop-desafio:v${{ github.run_number }}
+              robsonmendes37/fake-shop-desafio:latest
