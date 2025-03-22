@@ -10,9 +10,9 @@ jobs:
     steps:
       - name: Obter codigo 
         uses: actions/checkout@v4.2.2 
-      - name: Login to Docker Hub 
-        uses: docker/login-actions@v3 
-        with: 
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
           username: ${{ secrets.DOCKERHUB_USERNAME }} 
           password: ${{ secrets.DOCKERHUB_TOKEN }} 
           
