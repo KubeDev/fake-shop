@@ -2,7 +2,7 @@
 
 ## Sistema de Gerenciamento de Produtos e Vendas
 
-É sistema de gerenciamento de produtos e vendas utilizando **Docker** e **Kubernetes**. O ambiente conta com balanceamento de carga, serviços e deploy automatizado, além de gerenciamento de versões e rollback. A **DigitalOcean** foi utilizada como provedor de nuvem para a hospedagem e gerenciamento do cluster Kubernetes. O
+É sistema de gerenciamento de produtos e vendas utilizando **Docker** e **Kubernetes**. O ambiente conta com balanceamento de carga, serviços e deploy automatizado, além de gerenciamento de versões e rollback. A **DigitalOcean** foi utilizada como provedor de nuvem para a hospedagem e gerenciamento do cluster Kubernetes. 
 
 ---
 
@@ -42,6 +42,30 @@ Para configurar o ambiente corretamente, defina as seguintes variáveis:
 - **PostgreSQL** como banco de dados.
 - **DigitalOcean** como provedor de infraestrutura.
 - **Load Balancer** para distribuir o tráfego entre os pods.
+
+# Instruções de Deploy  
+
+## 1. Instalar Dependências  
+Antes de começar, certifique-se de ter instalado os seguintes componentes:  
+- `kubectl`  
+- `k3d` (opcional, caso queira rodar um cluster local)  
+- `Docker`  
+
+## 2. Criar um Cluster Kubernetes  
+Você pode criar um cluster de duas formas:  
+1. **Localmente**, utilizando `k3d`, `k3s`, `minikube` ou outra ferramenta.  
+2. **Na nuvem**, através de serviços como AWS EKS, Google GKE ou Azure AKS.
+
+Se optar por um cluster local com k3d: 
+```sh
+k3d cluster create --servers 3 --agents 3 -p "5000:30000@loadbalancer"
+```
+Se optar por um cluster na nuvem, será necessário atualizar o arquivo de configuração do `kubectl`:  
+```sh
+cd ~/.kube/
+code config  # Abre o arquivo no VS Code (substitua 'code' pelo editor de sua preferência)
+```
+
 
 Este projeto oferece uma solução escalável e confiável para gerenciamento de produtos e vendas, facilitando a implantação e o gerenciamento contínuo da aplicação.
 
