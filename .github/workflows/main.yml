@@ -1,0 +1,21 @@
+name: CI-CD
+on: 
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+jobs:
+  CI:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Get Code"
+      - run: echo "Run Docker Build"
+      - run: echo "Push the Docker image to Docker Hub"
+  CD:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Get Code"
+      - run: echo "Configure kubeconfig"
+      - run: echo "Run the apply"
+      
+    

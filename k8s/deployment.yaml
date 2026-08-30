@@ -1,0 +1,94 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: postgre
+spec:
+  selector:
+    matchLabels:
+      app: postgre
+  replicas: 1
+  template:
+    metadata:
+      labels: 
+        app: postgre
+    spec:
+      containers:
+        - name: postgre
+          image: postgres:13.16
+          ports: 
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_PASSWORD
+              value: Pg1234
+            - name: POSTGRES_USER
+              value: ecommerce
+            - name: POSTGRES_DB
+              value: ecommerce
+          resources:
+            limits:
+              memory: "51Mi"
+              cpu: "500m"
+          requests:
+            memory: "256Mi"
+            cpu: "250"
+---
+apiVersion: v1 
+kind: Service
+metadata: 
+  name: postgre
+spec:
+  type: ClusterIP
+  ports: 
+    - port: 5432
+  selector:
+    app: postgre
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: fakeshop
+spec:
+  selector:
+    matchLabels:
+      app: fakeshop
+  replicas: 2
+  template:
+    metadata:
+      labels: 
+        app: fakeshop
+    spec:
+      containers:
+        - name: fakeshop
+          image: joaodev599/fake-shop-challenge:v1
+          ports: 
+            - containerPort: 5000
+          env:
+            - name: DB_HOST
+              value: postgre
+            - name: DB_USER
+              value: ecommerce
+            - name: DB_PASSWORD
+              value: Pg1234
+            - name: DB_NAME
+              value: ecommerce
+            - name: FLASK_APP
+              value: index.py
+          resources:
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+---
+apiVersion: v1 
+kind: Service
+metadata: 
+  name: fakeshop
+spec:
+  type: NodePort
+  ports: 
+    - port: 5000
+      nodePort: 30000
+  selector:
+    app: fakeshop
